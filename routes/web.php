@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('info');
+    return view('starting');
 });
 
-// Route::get('/info', function () {
-//     return view('info');
-// });
+
+Route::get('/info', function () {
+    return view('info');
+});
 
 Auth::routes();
 
