@@ -18,4 +18,6 @@ This is the fun part Every day I learn. Almost everything is going to happen for
         </div>
     </div>
 </div>
+<!-- calendar  -->
+<!-- <div id='calendar'></div> -->
 @endsection

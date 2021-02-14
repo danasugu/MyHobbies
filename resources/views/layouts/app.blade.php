@@ -16,6 +16,36 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
+<!-- calendar  -->
+    <!-- <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+    <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/moment.min.js'></script>
+    <script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/jquery.min.js'></script>
+    <script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
+<script>
+
+  jQuery(document).ready(function($) {
+    $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,basicWeek,basicDay'
+      },
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+
+           
+    });
+
+  });
+
+</script> -->
+
+
+
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -34,7 +64,9 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                     <li><a class="nav-link{{ Request::is('/') ? ' active' : '' }}" href="/">Start</a></li>
-                    <li><a class="nav-link{{ Request::is('info') ? ' active' : '' }}" href="/info">Info</a></li>    
+                    <li><a class="nav-link{{ Request::is('info') ? ' active' : '' }}" href="/info">Info</a></li> 
+                    <li><a class="nav-link{{ Request::is('hobby*') ? ' active' : '' }}" href="/hobby">Hobbies</a></li> 
+                    <li><a class="nav-link{{ Request::is('tag*') ? ' active' : '' }}" href="/tag">Tags</a></li>    
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -74,8 +106,38 @@
         </nav>
 
         <main class="py-4">
+
+        @isset($message_success)
+        <div class="container">
+            <div class="alert alert-success">
+                {!! $message_success !!}
+            </div>
+        </div>
+        @endisset
+
+        @isset($message_warning)
+        <div class="container">
+            <div class="alert alert-warning">
+                {{!! $message_warning !!}}
+            </div>
+        </div>
+        @endisset
+
+        @if($errors->any())
+        <div class="container">
+            <div class="alert alert-danger">
+            <ul class="mb-0">
+            @foreach($errors->all() as $error)
+            <li> {{!! $error !!}} </li>
+            </ul>
+            @endforeach
+            </div>
+        </div>
+        @endif
             @yield('content')
         </main>
     </div>
+
+    
 </body>
 </html>
