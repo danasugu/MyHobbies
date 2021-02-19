@@ -10,6 +10,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+   public function hobbies (){
+    return $this->hasMany('App\Hobby');
+   }
     /**
      * The attributes that are mass assignable.
      *

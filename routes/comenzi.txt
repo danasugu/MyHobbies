@@ -1,0 +1,4 @@
+php artisan route:list --name=hobby
+npm run dev - to apply changes to css
+
+php artisan make:model Tag -a  create all files
