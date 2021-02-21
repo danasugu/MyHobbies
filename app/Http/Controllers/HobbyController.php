@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Hobby;
+use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class HobbyController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +19,12 @@ class HobbyController extends Controller
      */
     public function index()
     {
-       $hobbies = Hobby::all();
+        //    $hobbies = Hobby::all();
+        // $hobbies = Hobby::paginate(10);
+
+     
+        
+        $hobbies = Hobby::orderBy('created_at', 'DESC')->paginate(10);
        
        return view('hobby.index') ->with([
            'hobbies' => $hobbies
@@ -40,18 +50,29 @@ class HobbyController extends Controller
      */
     public function store(Request $request)
     {
-        $request ->validate([
-            'name' =>'required|min:3',
-            'description' => 'required|min:3',
+
+        $request->validate([
+            'name' => 'required|min:3',
+            'description' => 'required|min:5',
+            'image' => 'mimes:jpeg,jpg,bmp,png,gif'
         ]);
+
         $hobby = new Hobby([
-            'name'=> $request['name'],
+            'name' => $request['name'],
             'description' => $request['description'],
+            'user_id' => auth()->id()
         ]);
         $hobby->save();
-        return $this->index()->with([
-            'message_success' => "The hobby <b>" . $hobby->name . "</b> was created."
-        ]);
+
+        if ($request->image) {
+            $this->saveImages($request->image, $hobby->id);
+        }
+
+        return redirect('/hobby/' . $hobby->id)->with(
+            [
+                'message_warning' => "Please assign some tags now."
+            ]
+        );
     }
 
     /**
@@ -62,8 +83,15 @@ class HobbyController extends Controller
      */
     public function show(Hobby $hobby)
     {
+        $allTags = Tag ::all();
+        $usedTags = $hobby->tags;
+        $availableTags = $allTags -> diff($usedTags);
+
        return view('hobby.show')->with([
-           'hobby'=>$hobby
+           'hobby'=>$hobby,
+           'availableTags' =>$availableTags,
+           'message_success' => Session ::get('message_success'),
+           'message_warning' => Session ::get('message_warning')
        ]);
     }
 
